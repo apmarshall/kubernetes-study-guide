@@ -96,8 +96,8 @@ metadata:
 
 Synopsis:
 
-```bash
-kubectl <command> <target> <args> [-l key=value,key!=value | ‘key in (value1, value2),key notin(value)’] [--field-selector type.key=value] [--namespace=namespace-name] [--all-namespaces]
+```
+kubectl <command> <target> <args> <filters> [--namespace=namespace-name] [--all-namespaces]
 ```
 
 Key Commands:
@@ -109,6 +109,13 @@ Key Commands:
   - `diff -f <file-or-directory>` - declarative command to compare the contents of the target file/directory to the current cluster state. `diff -R -f <file-or-directory>` -> recursive comparison through subdirectories
   - `apply -f <file-or-directory>` - declarative command to apply the object definitions in the target file/directory to the cluster. `apply -R -f <file-or-directory>` -> recursive application through subdirectories
   - `cordon <node-name>` -> Node marked as unschedulable
+  
+Filters:
+  - `-l` = label-filters:
+    - equality-based: `-l key=value,key!=value`
+    - set-based: `-l 'key in (value1, value2),key notin (value)'`
+  - `--field-selector type.key=value` -> filter on fields other than labels (field must exist, or command will error)
+  
 
 ## DNS
 
