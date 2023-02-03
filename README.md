@@ -73,9 +73,56 @@ spec:
       // Insert Pod Template here. Must contain labels matching selectors (may contain additional)
 ```
 
+Selectors can be:
+  - Equality-based: `=`, `==`, or `!=`
+  - Set-based: `in`, `notin`, or `exists`
+ 
+Selectors are logical `and` or `&&` statements, there is no `or` equivalent  
 
-## Key Kubectl Commands
+### Special Cases:
+
+#### Nodes:
+
+```
+kind: Node
+apiVersion: v1
+metadata:
+  name: node-name // must be unique
+  labels:
+    key: value
+```
+
+## Kubectl 
+
+Synopsis:
+
+```
+kubectl <command> <target> <args> [-l key=value,key!=value | ‘key in (value1, value2),key notin(value)’][--field-selector type.key=value] [--namespace=namespace-name] [--all-namespaces]
+```
+
+Key Commands:
+  - `create` - imperative command to create an object
+    - <target> = object name
+    - common arguments:
+      - `--image <image-name>`
+  - `create -f <file-name>.yml` - imperative command to creat objects from a file
+  - `diff -f <file-or-directory>` - declarative command to compare the contents of the target file/directory to the current cluster state. `diff -R -f <file-or-directory>` -> recursive comparison through subdirectories
+  - `apply -f <file-or-directory>` - declarative command to apply the object definitions in the target file/directory to the cluster. `apply -R -f <file-or-directory>` -> recursive application through subdirectories
+  - `cordon <node-name>` -> Node marked as unschedulable
+  - 
 
 ## DNS
 
+`<service-name>.<namespace>.svc.cluster.local`
+
 ## Status Messages
+
+| Status | Node | Workload | Other |
+| ——— | ——-| ——- | ——- |
+| Ready | True: Healthy and Ready for Pods, False: Not healthy, cannot accept pods, Unknown: Node Controller cannot reach node | | |
+| DiskPressure | True: Disk capacity is low | | |
+| MemoryPressure | True: Memory is low | | |
+| PIDPressure | True: Too many processes running | | |
+| NetworkUnavailable | True: Network not correctly configured | | |
+
+
