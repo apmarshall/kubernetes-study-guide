@@ -70,5 +70,5 @@ spec:
       - {key: environment, operator: NotIn, values: [prod]}    
   StrategyType: RollingUpdate/Recreate // Deployments, defaults to RollingUpdate  
   template:
-      // Insert Pod Spec Template here. Must contain labels matching selectors (may contain additional)
+      // Insert Pod Template here. Must contain labels matching selectors (may contain additional)
 ```
