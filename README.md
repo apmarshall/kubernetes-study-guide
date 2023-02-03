@@ -118,10 +118,10 @@ Key Commands:
 
 | Status | Node | Workload | Other |
 | ----   | ---- | ----     | ----  |
-| Ready | True: Healthy and Ready for Pods, False: Not healthy, cannot accept pods, Unknown: Node Controller cannot reach node | | |
-| DiskPressure | True: Disk capacity is low | | |
-| MemoryPressure | True: Memory is low | | |
-| PIDPressure | True: Too many processes running | | |
-| NetworkUnavailable | True: Network not correctly configured | | |
+| Ready | `True`: Healthy and Ready for Pods, `False`: Not healthy, cannot accept pods, `Unknown`: Node Controller cannot reach node | | |
+| DiskPressure | `True`: Disk capacity is low | | |
+| MemoryPressure | `True`: Memory is low | | |
+| PIDPressure | `True`: Too many processes running | | |
+| NetworkUnavailable | `True`: Network not correctly configured | | |
 
 
