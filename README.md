@@ -8,24 +8,24 @@ A collection of notes on Kubernetes to prepare for CKA
 This basically appears in all Kubernetes objects.
 
 ```yml
-apiVersion: // the version of the Kubernetes API which contains the type of object you’re creating
-kind: // The type of object you are going to create (see above for examples)
+apiVersion: v1 # the version of the Kubernetes API which contains the type of object you’re creating
+kind: object-type # The type of object you are going to create (see above for examples)
 metadata:
-  name: object-name //always required, must be unique within namespace (or cluster for cluster-wide resources)
-  namespace: namespace-to-create-in // optional, if not specified uses default or current context
-  labels: // recommended, but optional
+  name: object-name # always required, must be unique within namespace (or cluster for cluster-wide resources)
+  namespace: namespace-to-create-in # optional, if not specified uses default or current context
+  labels: # recommended, but optional
     app.kubernetes.io/name: name 
     app.kubernetes.io/instance: name-identifier 
     app.kubernetes.io/version: “1.2.3” 
-    app.kubernetes.io/component: database // example
-    app.kubernetes.io/part-of: wordpress // example
-    app.kubernetes.io/managed-by: helm // example
-    release: stable // more examples
+    app.kubernetes.io/component: database # example
+    app.kubernetes.io/part-of: wordpress # example
+    app.kubernetes.io/managed-by: helm # example
+    release: stable # more examples
     environment: dev
     tier: backend
     partition: customerA
     track: daily
-  annotations:  // examples, optional
+  annotations:  # examples, optional
     time: 20230201T1201
     release-id: 12345
     branch: main
@@ -50,10 +50,10 @@ This is the building block that gets nested in many other K8s objects.
     containers:
     - name: container-name
       image: container-image:1.1.1
-      command: [‘sh’, ‘-c’, ‘echo “Hello, Kubernetes!” && sleep 3600’] // examples, optional
-      ports: // optional
+      command: [‘sh’, ‘-c’, ‘echo “Hello, Kubernetes!” && sleep 3600’] # examples, optional
+      ports: # optional
       - containerPort: 80
-  restartPolicy: OnFailure // optional, defaults to Always
+  restartPolicy: OnFailure # optional, defaults to Always
 ```
 
 ### Specs for Common Pod Controllers
@@ -61,16 +61,16 @@ ie, Deployments, DaemonSets, Jobs
 
 ```yml
 spec:
-  replicas: 3 // Deployments, replicaSets, etc
+  replicas: 3 # Deployments, replicaSets, etc
   selector:
-    matchLabels:  // examples. Used to match pods in things like deployments or services
-      key: value
-    matchExpressions:
+    matchLabels:  # examples. Used to match pods in things like deployments or services
+      key: value # equality-based
+    matchExpressions: # set-based
       - {key: tier, operator: In, values: [backend]}
       - {key: environment, operator: NotIn, values: [prod]}    
-  StrategyType: RollingUpdate/Recreate // Deployments, defaults to RollingUpdate  
+  StrategyType: RollingUpdate | Recreate # Deployments, defaults to RollingUpdate  
   template:
-      // Insert Pod Template here. Must contain labels matching selectors (may contain additional)
+      # Insert Pod Template here. Must contain labels matching selectors (may contain additional)
 ```
 
 Selectors can be:
@@ -87,7 +87,7 @@ Selectors are logical `and` or `&&` statements, there is no `or` equivalent
 kind: Node
 apiVersion: v1
 metadata:
-  name: node-name // must be unique
+  name: node-name # must be unique
   labels:
     key: value
 ```
