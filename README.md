@@ -72,3 +72,10 @@ spec:
   template:
       // Insert Pod Template here. Must contain labels matching selectors (may contain additional)
 ```
+
+
+## Key Kubectl Commands
+
+## DNS
+
+## Status Messages
