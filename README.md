@@ -7,7 +7,7 @@ A collection of notes on Kubernetes to prepare for CKA
 ### Standard Material
 This basically appears in all Kubernetes objects.
 
-```
+```yml
 apiVersion: // the version of the Kubernetes API which contains the type of object you’re creating
 kind: // The type of object you are going to create (see above for examples)
 metadata:
@@ -42,7 +42,7 @@ Common apiVersion Values:
 ### Basic Pod Object
 This is the building block that gets nested in many other K8s objects.
 
-```
+```yml
   metadata:
     labels: 
       key: value 
@@ -59,7 +59,7 @@ This is the building block that gets nested in many other K8s objects.
 ### Specs for Common Pod Controllers
 ie, Deployments, DaemonSets, Jobs
 
-```
+```yml
 spec:
   replicas: 3 // Deployments, replicaSets, etc
   selector:
@@ -83,7 +83,7 @@ Selectors are logical `and` or `&&` statements, there is no `or` equivalent
 
 #### Nodes:
 
-```
+```yml
 kind: Node
 apiVersion: v1
 metadata:
@@ -96,8 +96,8 @@ metadata:
 
 Synopsis:
 
-```
-kubectl <command> <target> <args> [-l key=value,key!=value | ‘key in (value1, value2),key notin(value)’][--field-selector type.key=value] [--namespace=namespace-name] [--all-namespaces]
+```bash
+kubectl <command> <target> <args> [-l key=value,key!=value | ‘key in (value1, value2),key notin(value)’] [--field-selector type.key=value] [--namespace=namespace-name] [--all-namespaces]
 ```
 
 Key Commands:
