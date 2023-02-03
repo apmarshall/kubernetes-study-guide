@@ -62,9 +62,9 @@ ie, Deployments, DaemonSets, Jobs
 ```yml
 spec:
   replicas: 3 # Deployments, replicaSets, etc
-  selector:
-    matchLabels:  # examples. Used to match pods in things like deployments or services
-      key: value # equality-based
+  selector: # Used to match pods in things like deployments or services
+    matchLabels: # equality-based
+      key: value 
     matchExpressions: # set-based
       - {key: tier, operator: In, values: [backend]}
       - {key: environment, operator: NotIn, values: [prod]}    
