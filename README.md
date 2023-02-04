@@ -89,8 +89,10 @@ apiVersion: v1
 metadata:
   name: node-name # must be unique
   labels:
-    key: value
+    key: value 
 ```
+
+Node objects also contain a `status` section, with fields for `conditions`, `addresses`, `capacity`, and `info.` These are set and maintained by the kubelet and node controller automatically. Some fields can be overwritten using the kubelet (ie, `hostName`). Manually registered (as opposed to self-registered) nodes need their capacity information set when added.
 
 ## Kubectl 
 
@@ -123,7 +125,7 @@ Filters:
 
 ## Status Messages
 
-| Status | Node | Workload | Other |
+| Condition | Node | Workload | Other |
 | ----   | ---- | ----     | ----  |
 | Ready | `True`: Healthy and Ready for Pods, `False`: Not healthy, cannot accept pods, `Unknown`: Node Controller cannot reach node | | |
 | DiskPressure | `True`: Disk capacity is low | | |
@@ -131,4 +133,10 @@ Filters:
 | PIDPressure | `True`: Too many processes running | | |
 | NetworkUnavailable | `True`: Network not correctly configured | | |
 
+## Security
 
+- Need a method of authentication and authorization to the API server
+- Decide if anonymous requests to API server will be allowed
+- Decide if service account tokens will be allowed
+- Need a means of certificate bootstrapping and distribution -> Nodes provisioned with public root cert for cluster, client credentials for kubelet = client cert
+- Service accounts -> secure communication between pods and API server
