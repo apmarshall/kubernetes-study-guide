@@ -145,4 +145,3 @@ Filters:
   - Use SSH tunneling between the API server and the kubelet
 - Enable kubelet authentication/authorization
 - Do not run connections between API server and nodes/pods/services over the open internet/untrusted networks (no authN/Z or verification possible, use something like SSH tunneling or the Konnectivity service)
-- 
