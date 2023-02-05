@@ -140,3 +140,9 @@ Filters:
 - Decide if service account tokens will be allowed
 - Need a means of certificate bootstrapping and distribution -> Nodes provisioned with public root cert for cluster, client credentials for kubelet = client cert
 - Service accounts -> secure communication between pods and API server
+- Either:
+  - Turn on verification of the kubelet’s serving certificate
+  - Use SSH tunneling between the API server and the kubelet
+- Enable kubelet authentication/authorization
+- Do not run connections between API server and nodes/pods/services over the open internet/untrusted networks (no authN/Z or verification possible, use something like SSH tunneling or the Konnectivity service)
+- 
