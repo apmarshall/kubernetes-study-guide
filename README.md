@@ -53,6 +53,10 @@ This is the building block that gets nested in many other K8s objects.
       command: [‘sh’, ‘-c’, ‘echo “Hello, Kubernetes!” && sleep 3600’] # examples, optional
       ports: # optional
       - containerPort: 80
+    initContainers: # example, optional
+    - name: init-myservice
+      image: initcontainer:image:1.2.3
+      command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
   restartPolicy: OnFailure # optional, defaults to Always
 ```
 
@@ -99,17 +103,20 @@ Node objects also contain a `status` section, with fields for `conditions`, `add
 Synopsis:
 
 ```
-kubectl <command> <target> <args> <filters> [--namespace=namespace-name] [--all-namespaces]
+kubectl <command> <args> <filters> [--namespace=namespace-name] [--all-namespaces]
 ```
 
 Key Commands:
-  - `create` - imperative command to create an object
-    - `<target>` = object name
+  - `create <object-name>` - imperative command to create an object
     - common arguments:
       - `--image <image-name>`
   - `create -f <file-name>.yml` - imperative command to creat objects from a file
   - `diff -f <file-or-directory>` - declarative command to compare the contents of the target file/directory to the current cluster state. `diff -R -f <file-or-directory>` -> recursive comparison through subdirectories
   - `apply -f <file-or-directory>` - declarative command to apply the object definitions in the target file/directory to the cluster. `apply -R -f <file-or-directory>` -> recursive application through subdirectories
+  - `get <type>` - lists available resources by specified type (`pods`, `deployments`, `services`, etc)
+  - `describe <type>(/<object>)` - gets the details of all objects of a type or a specified object of a type
+  - `rollout status <type>/<object>` - checks the status of an update to the specified object
+  - `rollout history <type>/<object>` - describes the rollout history of the specified object
   - `cordon <node-name>` -> Node marked as unschedulable
   
 Filters:
@@ -117,7 +124,17 @@ Filters:
     - equality-based: `-l key=value,key!=value`
     - set-based: `-l 'key in (value1, value2),key notin (value)'`
   - `--field-selector type.key=value` -> filter on fields other than labels (field must exist, or command will error)
-  
+
+Popular Args/Options:
+  - `-o yaml` - Generate the output (usually of `describe` or `create`) in yaml. Direct to a file with `> filename` at the end to get a draft of a resrouce
+
+Other imperative commands:
+  - `set image <type>/<object> <container-name>=<image>:<version>` - updates the image for the specified container in the specified object
+  - `rollout undo <type>/<object>` - reverts to the previous version in an objects rollout history
+
+Object Type Aliases:
+  - rs = replicaSet
+  - deploy = deployment
 
 ## DNS
 
@@ -125,13 +142,19 @@ Filters:
 
 ## Status Messages
 
-| Condition | Node | Workload | Other |
+| Condition/Status | Node | Pod/Pod Controller | Other |
 | ----   | ---- | ----     | ----  |
-| Ready | `True`: Healthy and Ready for Pods, `False`: Not healthy, cannot accept pods, `Unknown`: Node Controller cannot reach node | | |
+| Ready | `True`: Healthy and Ready for Pods, `False`: Not healthy, cannot accept pods, `Unknown`: Node Controller cannot reach node | `True`: All containers in the Pod are ready && All conditions specified in `readinessGates` are met. Pod can be added to load balancing pools for matching services | |
+| Complete | | `True`: All of a Deployments ReplicaSets are up-to-date, all replicas are available, no old replicas are running | |
+| ContainersReady | | `True`: All containers in the pod are ready | |
+| Scheduled | | `PodScheduled = True` -> Pod has been scheduled to a node | |
+| Initialized | | `True`: All init containers have completed successfully | |
+| Progressing | | `True`: A deployment has created/scaled a replicaSet OR new pods in a deployment have become ready; `False`: Deployment unable to complete its ReplicaSet | |
 | DiskPressure | `True`: Disk capacity is low | | |
 | MemoryPressure | `True`: Memory is low | | |
 | PIDPressure | `True`: Too many processes running | | |
 | NetworkUnavailable | `True`: Network not correctly configured | | |
+| PodHasNetwork | | `True`: Pod sandbox has been successfully created and networking configured | |
 
 ## Security
 
